@@ -1,11 +1,12 @@
 import "@radix-ui/themes/styles.css";
-import type { Metadata } from "next";
-import { Mulish } from "next/font/google";
+import "./theme-config.css";
 import "./globals.css";
 import { Theme } from "@radix-ui/themes";
+import { Mulish } from "next/font/google";
+import type { Metadata } from "next";
 import NavBar from "./NavBar";
 
-const mulish = Mulish({ subsets: ["latin"] });
+const mulish = Mulish({ subsets: ["latin"], variable: "--font-mulish" });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,8 +20,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={mulish.className}>
-        <Theme>
+      <body className={mulish.variable}>
+        <Theme appearance='light' accentColor='jade' radius='large'>
           <NavBar />
           <main className='p-5'>{children}</main>
         </Theme>
