@@ -5,6 +5,7 @@ import { Container, Theme } from "@radix-ui/themes";
 import { Mulish } from "next/font/google";
 import type { Metadata } from "next";
 import NavBar from "./NavBar";
+import AuthProvider from "./auth/Provider";
 
 const mulish = Mulish({ subsets: ["latin"], variable: "--font-mulish" });
 
@@ -21,12 +22,14 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={mulish.variable}>
-        <Theme appearance='light' accentColor='jade' radius='large'>
-          <NavBar />
-          <main className='p-5'>
-            <Container>{children}</Container>
-          </main>
-        </Theme>
+        <AuthProvider>
+          <Theme appearance='light' accentColor='jade' radius='large'>
+            <NavBar />
+            <main className='p-5'>
+              <Container>{children}</Container>
+            </main>
+          </Theme>
+        </AuthProvider>
       </body>
     </html>
   );
