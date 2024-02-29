@@ -6,6 +6,7 @@ import { Mulish } from "next/font/google";
 import type { Metadata } from "next";
 import NavBar from "./NavBar";
 import AuthProvider from "./auth/Provider";
+import QueryClientProvider from "./QueryClientProvider";
 
 const mulish = Mulish({ subsets: ["latin"], variable: "--font-mulish" });
 
@@ -22,14 +23,16 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={mulish.variable}>
-        <AuthProvider>
-          <Theme appearance='light' accentColor='jade' radius='large'>
-            <NavBar />
-            <main className='p-5'>
-              <Container>{children}</Container>
-            </main>
-          </Theme>
-        </AuthProvider>
+        <QueryClientProvider>
+          <AuthProvider>
+            <Theme appearance='light' accentColor='jade' radius='large'>
+              <NavBar />
+              <main className='p-5'>
+                <Container>{children}</Container>
+              </main>
+            </Theme>
+          </AuthProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );
