@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Skeleton } from "@/app/components";
 import Link from "next/link";
 import { SiOpenbugbounty } from "react-icons/si";
 import { usePathname } from "next/navigation";
@@ -62,9 +63,9 @@ const NavLinks = () => {
 const AuthStatus = () => {
   const { status, data: session } = useSession();
 
-  // if (status === "loading") {
-  //   return null;
-  // }
+  if (status === "loading") {
+    return <Skeleton width='3rem' />;
+  }
 
   // if (status === "unauthenticated") {
   //   return <Link href='/api/auth/signin'>Log in</Link>;
