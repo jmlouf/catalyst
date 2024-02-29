@@ -1,12 +1,12 @@
-import "@radix-ui/themes/styles.css";
-import "./theme-config.css";
-import "./globals.css";
 import { Container, Theme } from "@radix-ui/themes";
-import { Mulish } from "next/font/google";
+import "@radix-ui/themes/styles.css";
 import type { Metadata } from "next";
+import { Mulish } from "next/font/google";
 import NavBar from "./NavBar";
-import AuthProvider from "./auth/Provider";
 import QueryClientProvider from "./QueryClientProvider";
+import AuthProvider from "./auth/Provider";
+import "./globals.css";
+import "./theme-config.css";
 
 const mulish = Mulish({ subsets: ["latin"], variable: "--font-mulish" });
 
@@ -17,9 +17,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang='en'>
       <body className={mulish.variable}>
