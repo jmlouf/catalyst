@@ -15,8 +15,8 @@ const AssigneeSelect = () => {
   } = useQuery<User[]>({
     queryKey: ["users"],
     queryFn: () => axios.get("/api/users").then((res) => res.data),
-    staleTime: 60 * 1000,
-    retry: 3 // 60 seconds.
+    staleTime: 60 * 1000, // 60 seconds.
+    retry: 3
   });
 
   if (isLoading) return <Skeleton />;
