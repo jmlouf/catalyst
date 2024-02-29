@@ -1,5 +1,5 @@
 // Creates single instance of Prisma client and avoids multiple instances from running.
-
+import "dotenv";
 import { PrismaClient } from "@prisma/client";
 
 const prismaClientSingleton = () => {
