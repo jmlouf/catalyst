@@ -1,29 +1,32 @@
 "use client";
 
+import { Skeleton } from "@/app/components";
 import { Issue, User } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Skeleton } from "@/app/components";
 import toast, { Toaster } from "react-hot-toast";
 // import React, { useEffect, useState } from "react";
 
 const AssigneeSelect = ({ issue }: { issue: Issue }) => {
-  const {
-    data: users,
-    error,
-    isLoading
-  } = useQuery<User[]>({
-    queryKey: ["users"],
-    queryFn: () => axios.get("/api/users").then((res) => res.data),
-    staleTime: 60 * 1000, // 60 seconds.
-    retry: 3
-  });
+  // Custom hook.
+  const { data: users, error, isLoading } = useUsers();
 
   if (isLoading) return <Skeleton />;
 
   // After 3 trues, selector disappears.
   if (error) return null;
+
+  const assignIssue = (userId: string) => {
+    // UI conveys visual feedback; no await necessary.
+    axios
+      .patch("/api/issues/" + issue.id, {
+        assignedToUserId: userId === "unassigned" ? null : userId
+      })
+      .catch(() => {
+        toast.error("Changes could not be saved.");
+      });
+  };
 
   // NO LONGER NEEDED. SEE ABOVE.
   // const [users, setUsers] = useState<User[]>([]);
@@ -42,16 +45,7 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
       <Select.Root
         // Change default value to "unassigned".
         defaultValue={issue.assignedToUserId || "unassigned"}
-        onValueChange={(userId) => {
-          // UI conveys visual feedback; no await necessary.
-          axios
-            .patch("/api/issues/" + issue.id, {
-              assignedToUserId: userId === "unassigned" ? null : userId
-            })
-            .catch(() => {
-              toast.error("Changes could not be saved.");
-            });
-        }}
+        onValueChange={assignIssue}
       >
         <Select.Trigger placeholder='Assign...' />
         <Select.Content>
@@ -70,5 +64,13 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
     </>
   );
 };
+
+const useUsers = () =>
+  useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: () => axios.get("/api/users").then((res) => res.data),
+    staleTime: 60 * 1000, // 60 seconds.
+    retry: 3
+  });
 
 export default AssigneeSelect;
