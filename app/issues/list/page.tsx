@@ -21,14 +21,24 @@ const IssuesPage = async ({ searchParams }: Props) => {
   ];
 
   const statuses = Object.values(Status);
+
+  // Requires object of statuses.
   const status = statuses.includes(searchParams.status)
     ? searchParams.status
+    : undefined;
+
+  // Dynamic properties.
+  const orderBy = columns
+    .map((column) => column.value)
+    .includes(searchParams.orderBy)
+    ? { [searchParams.orderBy]: "asc" }
     : undefined;
 
   const issues = await prisma.issue.findMany({
     where: {
       status
-    }
+    },
+    orderBy
   });
 
   return (
